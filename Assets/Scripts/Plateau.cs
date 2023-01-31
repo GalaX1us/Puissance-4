@@ -130,4 +130,126 @@ public class Plateau
 
         return counter >= 4;
     }
+
+
+
+// ----------------------------------------------
+
+
+public int MinMax(Plateau p, int depth, bool isMaximizing)
+{
+    if (depth == 0 || p.Result(isMaximizing))
+    {
+        return p.Evaluate();
+    }
+
+    int bestValue = isMaximizing ? int.MinValue : int.MaxValue;
+    for (int i = 0; i < 7; i++)
+    {
+        if (p.IsColumnNotFull(i))
+        {
+            Plateau newP = p.Clone();
+            newP.UpdateBoard(i, isMaximizing);
+            int value = MinMax(newP, depth - 1, !isMaximizing);
+            bestValue = isMaximizing ? Mathf.Max(bestValue, value) : Mathf.Min(bestValue, value);
+        }
+    }
+
+    return bestValue;
 }
+
+public bool IsColumnNotFull(int col)
+{
+    return playerBoard[0][col] == PlayerType.NONE;
+}
+
+public int GetBestMove(Plateau p, int depth)
+{
+    int bestValue = int.MinValue;
+    int bestMove = 0;
+    for (int i = 0; i < 7; i++)
+    {
+        if (p.IsColumnNotFull(i))
+        {
+            Plateau newP = p.Clone();
+            newP.UpdateBoard(i, true);
+            int value = MinMax(newP, depth - 1, false);
+            if (value > bestValue)
+            {
+                bestValue = value;
+                bestMove = i;
+            }
+        }
+    }
+
+    return bestMove;
+}
+
+public int Evaluate()
+{
+    int value = 0;
+    for (int i = 0; i < 6; i++)
+    {
+        for (int j = 0; j < 7; j++)
+        {
+            if (playerBoard[i][j] != PlayerType.NONE)
+            {
+                value += EvaluateLine(i, j, 1, 0);
+                value += EvaluateLine(i, j, 0, 1);
+                value += EvaluateLine(i, j, 1, 1);
+                value += EvaluateLine(i, j, -1, 1);
+            }
+        }
+    }
+
+    return value;
+}
+
+private int EvaluateLine(int row, int col, int rowDiff, int colDiff)
+{
+    PlayerType player = playerBoard[row][col];
+    int counter = 0;
+
+    for (int i = 0; i < 4; i++)
+    {
+        int r = row + i * rowDiff;
+        int c = col + i * colDiff;
+        if (r >= 0 && r < 6 && c >= 0 && c < 7 && playerBoard[r][c] == player)
+        {
+            counter++;
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    int value = 0;
+    if (counter == 4)
+    {
+        value = (player == PlayerType.RED ? 1 : -1) * 1000;
+    }
+    else
+    {
+        value = (counter > 0 ? counter : 0) * (player == PlayerType.RED ? 1 : -1);
+    }
+
+    return value;
+}
+
+public Plateau Clone()
+{
+    Plateau newP = new Plateau();
+    for (int i = 0 ; i < 6; i++)
+    {
+        for (int j = 0; j < 7; j++)
+        {
+            newP.playerBoard[i][j] = playerBoard[i][j];
+        }
+    }
+    return newP;
+}
+}
+
+
+
