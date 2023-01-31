@@ -227,7 +227,7 @@ private int EvaluateLine(int row, int col, int rowDiff, int colDiff)
     int value = 0;
     if (counter == 4)
     {
-        value = (player == PlayerType.RED ? 1 : -1) * 1000;
+        value = (player == PlayerType.RED ? 1 : -1) * 1000; // fois mille ça fait peut être beaucoup il faudra paramétrer tout ça 
     }
     else
     {
