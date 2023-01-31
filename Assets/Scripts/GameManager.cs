@@ -51,6 +51,11 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("Game");
     }
 
+    public void Rejouer()
+    {
+        SceneManager.LoadScene("Game");
+    }
+
     public void Quitter()
     {
         #if UNITY_EDITOR
