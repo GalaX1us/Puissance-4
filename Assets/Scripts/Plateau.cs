@@ -160,7 +160,7 @@ public int MinMax(Plateau p, int depth, bool isMaximizing)
 
 public bool IsColumnNotFull(int col)
 {
-    return playerBoard[0][col] == PlayerType.NONE;
+    return playerBoard[5][col] == PlayerType.NONE;
 }
 
 public int GetBestMove(Plateau p, int depth)
@@ -207,7 +207,7 @@ public int Evaluate()
 
 private int EvaluateLine(int row, int col, int rowDiff, int colDiff)
 {
-    PlayerType player = playerBoard[row][col];
+    PlayerType player = PlayerType.GREEN; 
     int counter = 0;
 
     for (int i = 0; i < 4; i++)
