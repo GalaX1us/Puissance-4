@@ -6,5 +6,5 @@ public class Colonne : MonoBehaviour
 {
     public int col;
     public Vector3 spawnLocation;
-    public Vector3 targetlocation;
+    public Vector3 targetLocation;
 }
