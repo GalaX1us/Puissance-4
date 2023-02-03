@@ -77,9 +77,9 @@ public class GameManager : MonoBehaviour
             //If GameFinsished then return
             if (hasGameFinished) return;
 
-            int numCol = myBoard.GetBestMove(myBoard, 4);
+            int numCol = myBoard.GetBestMove(myBoard, 5);
             string nomCol = "Colonne" + numCol;
-            GameObject col = GameObject.Find(nomCol); //////////////////////// Remplacer 0 par le num de la colonne
+            GameObject col = GameObject.Find(nomCol); 
             Colonne c = col.GetComponent<Colonne>();
             Vector3 spawnPos = c.GetComponent<Colonne>().spawnLocation;
             Vector3 targetPos = c.GetComponent<Colonne>().targetLocation;
