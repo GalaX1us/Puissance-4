@@ -63,9 +63,9 @@ public class GameManager : MonoBehaviour
 
     public void Quitter()
     {
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
-        #endif
+#endif
         Application.Quit();
         Debug.Log("quitter");
     }
@@ -153,60 +153,8 @@ public class GameManager : MonoBehaviour
 
             }
         }
-
-        if(jouerContreIA)
-        {
-            //If GameFinsished then return
-            if (hasGameFinished) return;
-
-            //Raycast2D
-            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
-            RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
-            if (!hit.collider) return;
-
-            if (hit.collider.CompareTag("appui"))
-            {
-                //Check out of Bounds
-                if (hit.collider.gameObject.GetComponent<Colonne>().targetlocation.y > 350f) return;
-
-                //Spawn the GameObject
-                Vector3 spawnPos = hit.collider.gameObject.GetComponent<Colonne>().spawnLocation;
-                Vector3 targetPos = hit.collider.gameObject.GetComponent<Colonne>().targetlocation;
-                GameObject circle = Instantiate(isPlayer ? red : green);
-                circle.transform.position = spawnPos;
-                circle.GetComponent<Mouvement>().targetPostion = targetPos;
-
-                //Increase the targetLocationHeight
-                hit.collider.gameObject.GetComponent<Colonne>().targetlocation = new Vector3(targetPos.x, targetPos.y + 54f, targetPos.z);
-
-                
-                int col = myBoard.GetBestMove(myBoard, 3);
-
-                
-                myBoard.UpdateBoard(hit.collider.gameObject.GetComponent<Colonne>().col - 1, isPlayer);
-                if (myBoard.Result(isPlayer))
-                {
-                    TXT_Tour.text = (isPlayer ? "Red" : "Green") + " Wins!";
-                    hasGameFinished = true;
-                    return;
-                }
-
-                //TurnMessage
-                TXT_Tour.text = !isPlayer ? RED_MESSAGE : GREEN_MESSAGE;
-                TXT_Tour.color = !isPlayer ? RED_COLOR : GREEN_COLOR;
-
-                //Change PlayerTurn
-                isPlayer = !isPlayer;
-            }
-
-            
-            
-        }
-        
-
     }
-
+}
     
     // code version alpha 
 
@@ -261,5 +209,3 @@ public class GameManager : MonoBehaviour
 //     }
 //     return null;
 // }
-
-}
