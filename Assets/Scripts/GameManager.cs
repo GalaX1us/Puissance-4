@@ -77,9 +77,9 @@ public class GameManager : MonoBehaviour
             //If GameFinsished then return
             if (hasGameFinished) return;
 
-
-            //Spawn the GameObject
-            GameObject col = GameObject.Find("Colonne0"); //////////////////////// Remplacer 0 par le num de la colonne
+            int numCol = myBoard.GetBestMove(myBoard, 5);
+            string nomCol = "Colonne" + numCol;
+            GameObject col = GameObject.Find(nomCol); 
             Colonne c = col.GetComponent<Colonne>();
             Vector3 spawnPos = c.GetComponent<Colonne>().spawnLocation;
             Vector3 targetPos = c.GetComponent<Colonne>().targetLocation;
@@ -155,57 +155,3 @@ public class GameManager : MonoBehaviour
         }
     }
 }
-    
-    // code version alpha 
-
-
-// private void PlayPredictedMove(int col)
-// {
-//     //Check if Game is Finished
-//     if (hasGameFinished) return;
-
-//     //Get the Target and Spawn Location from the Column Component
-//     GameObject targetColumn = GetColumn(col);
-//     Vector3 spawnPos = targetColumn.GetComponent<Colonne>().spawnLocation;
-//     Vector3 targetPos = targetColumn.GetComponent<Colonne>().targetlocation;
-
-//     //Check if Out of Bounds
-//     if (targetPos.y > 350f) return;
-
-//     //Spawn the GameObject
-//     GameObject circle = Instantiate(isPlayer ? red : green);
-//     circle.transform.position = spawnPos;
-//     circle.GetComponent<Mouvement>().targetPostion = targetPos;
-
-//     //Increase the targetLocationHeight
-//     targetColumn.GetComponent<Colonne>().targetlocation = new Vector3(targetPos.x, targetPos.y + 54f, targetPos.z);
-
-//     //Update the Board
-//     myBoard.UpdateBoard(col - 1, isPlayer);
-//     if (myBoard.Result(isPlayer))
-//     {
-//         TXT_Tour.text = (isPlayer ? "Red" : "Green") + " Wins!";
-//         hasGameFinished = true;
-//         return;
-//     }
-
-//     //Change Turn Message
-//     TXT_Tour.text = !isPlayer ? RED_MESSAGE : GREEN_MESSAGE;
-//     TXT_Tour.color = !isPlayer ? RED_COLOR : GREEN_COLOR;
-
-//     //Change Player Turn
-//     isPlayer = !isPlayer;
-// }
-
-// private GameObject GetColumn(int col)
-// {
-//     GameObject[] columns = GameObject.FindGameObjectsWithTag("appui");
-//     foreach (var column in columns)
-//     {
-//         if (column.GetComponent<Colonne>().col == col)
-//         {
-//             return column;
-//         }
-//     }
-//     return null;
-// }
