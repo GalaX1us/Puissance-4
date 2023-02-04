@@ -1,3 +1,5 @@
+
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +12,14 @@ public class Plateau
 {
     PlayerType[][] playerBoard;
     GridPos currentPos;
+
+    // ponderations 
+
+    int ponderationGagnante = 21;
+    int ponderationPerdante = -20; 
+    int ponderationComb = 100;
+    int scorePour3 = 100;
+    int scorePour4 = 5000;
 
     public Plateau()
     {
@@ -186,7 +196,7 @@ public int GetBestMove(Plateau p, int depth)
 }
 
 public int Evaluate()
-{
+{   
     int value = 0;
     for (int i = 0; i < 6; i++)
     {
@@ -194,10 +204,10 @@ public int Evaluate()
         {
             if (playerBoard[i][j] != PlayerType.NONE)
             {
-                value += EvaluateLine(i, j, 1, 0);
-                value += EvaluateLine(i, j, 0, 1);
-                value += EvaluateLine(i, j, 1, 1);
-                value += EvaluateLine(i, j, -1, 1);
+                value += EvaluateLine(i, j, 1, 0); // horizontal
+                value += EvaluateLine(i, j, 0, 1); // vertical
+                value += EvaluateLine(i, j, 1, 1); // diagonale
+                value += EvaluateLine(i, j, -1, 1); //  diagonale inversée
                 
             }
         }
@@ -208,9 +218,13 @@ public int Evaluate()
 
 private int EvaluateLine(int row, int col, int rowDiff, int colDiff)
 {
-    PlayerType player = PlayerType.RED; 
-    int counter = 0;
-
+    PlayerType player = playerBoard[row][col];    int counter = 0;
+    int ponderationGagnante = 20;
+    int ponderationPerdante = -21; 
+    int ponderationComb = 100;
+    int scorePour2 = 10;
+    int scorePour3 = 100;
+    int scorePour4 = 3000;
     for (int i = 0; i < 4; i++)
     {
         int r = row + i * rowDiff;
@@ -225,17 +239,20 @@ private int EvaluateLine(int row, int col, int rowDiff, int colDiff)
         }
     }
 
+    
     int value = 0;
     if (counter == 4)
     {
-        if (player == PlayerType.RED)
-            value = 1000;
-        else
-            value = -2000000000;
+        value = scorePour4 * (player == PlayerType.RED ? ponderationGagnante : ponderationPerdante);
     }
     else
-    {
-        value = (counter > 0 ? counter : 0) * (player == PlayerType.RED ? 1 : -1);
+    {   
+        int score = 0;
+        if (counter == 3)
+        {
+            score = scorePour3;
+        }
+        value = score * (player == PlayerType.RED ? ponderationGagnante : ponderationPerdante);
     }
 
     return value;
@@ -254,6 +271,3 @@ public Plateau Clone()
     return newP;
 }
 }
-
-
-
